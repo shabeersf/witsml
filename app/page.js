@@ -256,43 +256,56 @@ export default function DrillingDashboard() {
     : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-3 sm:p-4 md:p-6">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <Gauge className="w-7 h-7" />
+        <div className="flex flex-col gap-4 mb-4">
+          {/* Top row: Logo and Title */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Gauge className="w-6 h-6 sm:w-7 sm:h-7" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  Drilling Surface Parameters
+                </h1>
+                <p className="text-slate-400 text-xs sm:text-sm">Real-time Monitoring System</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                Drilling Surface Parameters
-              </h1>
-              <p className="text-slate-400 text-sm">Real-time Monitoring System</p>
+            {/* Time display - hidden on mobile, shown on larger screens */}
+            <div className="hidden lg:block text-right">
+              <div className="text-2xl font-mono text-cyan-400">{time.toLocaleTimeString()}</div>
+              <div className="text-sm text-slate-500">{time.toLocaleDateString()}</div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          
+          {/* Bottom row: Action buttons */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <Link 
               href="/generate"
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors text-sm sm:text-base"
             >
-              <LinkIcon className="w-4 h-4" />
-              Generate Data
+              <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Generate Data</span>
+              <span className="sm:hidden">Generate</span>
             </Link>
             <button
               onClick={() => setShowUploadModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors text-sm sm:text-base"
             >
-              <Upload className="w-4 h-4" />
-              Upload Data
+              <Upload className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Upload Data</span>
+              <span className="sm:hidden">Upload</span>
             </button>
-            <div className="text-right">
-              <div className="text-2xl font-mono text-cyan-400">{time.toLocaleTimeString()}</div>
-              <div className="text-sm text-slate-500">{time.toLocaleDateString()}</div>
+            {/* Time display for mobile/tablet */}
+            <div className="lg:hidden ml-auto text-right">
+              <div className="text-lg sm:text-xl font-mono text-cyan-400">{time.toLocaleTimeString()}</div>
+              <div className="text-xs sm:text-sm text-slate-500">{time.toLocaleDateString()}</div>
             </div>
           </div>
         </div>
@@ -304,48 +317,63 @@ export default function DrillingDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-4"
+          className="mb-6 bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-3 sm:p-4"
         >
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handlePlayPause}
-                className={`p-3 rounded-lg ${isPlaying ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} transition-colors`}
-              >
-                {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-              </button>
-              <button
-                onClick={handleReset}
-                className="p-3 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors"
-              >
-                <RotateCcw className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleSpeedChange}
-                className="px-4 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors flex items-center gap-2"
-              >
-                <FastForward className="w-5 h-5" />
-                {playbackSpeed}x
-              </button>
+          <div className="flex flex-col gap-4">
+            {/* Controls row */}
+            <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  onClick={handlePlayPause}
+                  className={`p-2 sm:p-3 rounded-lg ${isPlaying ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} transition-colors`}
+                >
+                  {isPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5" />}
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="p-2 sm:p-3 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors"
+                >
+                  <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+                <button
+                  onClick={handleSpeedChange}
+                  className="px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base"
+                >
+                  <FastForward className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {playbackSpeed}x
+                </button>
+              </div>
+              
+              {/* Status info - shown on mobile */}
+              <div className="text-right lg:hidden">
+                <div className="text-xs sm:text-sm text-slate-400">Simulation Active</div>
+                <div className="text-sm sm:text-base font-semibold text-green-400">
+                  {simulationData.data.length} points
+                </div>
+              </div>
             </div>
             
-            <div className="flex-1 max-w-2xl">
-              <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
-                <span>Point {currentIndex + 1} / {simulationData.data.length}</span>
-                <span>{progress.toFixed(1)}%</span>
+            {/* Progress bar section */}
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="flex-1">
+                <div className="flex items-center justify-between text-xs sm:text-sm text-slate-400 mb-2">
+                  <span>Point {currentIndex + 1} / {simulationData.data.length}</span>
+                  <span>{progress.toFixed(1)}%</span>
+                </div>
+                <div className="w-full bg-slate-800 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
 
-            <div className="text-right">
-              <div className="text-sm text-slate-400">Simulation Active</div>
-              <div className="text-lg font-semibold text-green-400">
-                {simulationData.data.length} data points
+              {/* Status info - hidden on mobile, shown on desktop */}
+              <div className="hidden lg:block text-right flex-shrink-0">
+                <div className="text-sm text-slate-400">Simulation Active</div>
+                <div className="text-lg font-semibold text-green-400">
+                  {simulationData.data.length} data points
+                </div>
               </div>
             </div>
           </div>
@@ -359,18 +387,18 @@ export default function DrillingDashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
             onClick={() => setShowUploadModal(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full"
+              className="bg-slate-900 border border-slate-700 rounded-2xl p-6 sm:p-8 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-cyan-400">Upload Simulation Data</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-cyan-400">Upload Simulation Data</h2>
                 <button
                   onClick={() => setShowUploadModal(false)}
                   className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
@@ -381,11 +409,11 @@ export default function DrillingDashboard() {
 
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-xl p-12 text-center cursor-pointer transition-all duration-300"
+                className="border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-xl p-8 sm:p-12 text-center cursor-pointer transition-all duration-300"
               >
-                <Upload className="w-16 h-16 mx-auto mb-4 text-slate-500" />
-                <p className="text-slate-300 mb-2">Click to upload file</p>
-                <p className="text-sm text-slate-500">Supports XML and JSON formats</p>
+                <Upload className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-slate-500" />
+                <p className="text-slate-300 mb-2 text-sm sm:text-base">Click to upload file</p>
+                <p className="text-xs sm:text-sm text-slate-500">Supports XML and JSON formats</p>
               </div>
 
               <input
@@ -397,7 +425,7 @@ export default function DrillingDashboard() {
               />
 
               <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-                <p className="text-sm text-slate-300">
+                <p className="text-xs sm:text-sm text-slate-300">
                   Upload a WITSML XML or JSON file generated from the data generator to simulate real-time drilling operations.
                 </p>
               </div>
@@ -407,33 +435,33 @@ export default function DrillingDashboard() {
       </AnimatePresence>
 
       {/* Depth Indicators */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-500/30 rounded-xl p-6"
+          className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-500/30 rounded-xl p-4 sm:p-6"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <TrendingUp className="w-6 h-6 text-cyan-400" />
-            <h2 className="text-xl font-semibold text-cyan-400">Bit Depth</h2>
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
+            <h2 className="text-lg sm:text-xl font-semibold text-cyan-400">Bit Depth</h2>
           </div>
-          <div className="text-5xl font-bold text-white mb-2">{drillingData.bitDepth.toFixed(2)}</div>
-          <div className="text-slate-400">meters</div>
+          <div className="text-4xl sm:text-5xl font-bold text-white mb-2">{drillingData.bitDepth.toFixed(2)}</div>
+          <div className="text-slate-400 text-sm sm:text-base">meters</div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-xl p-6"
+          className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-xl p-4 sm:p-6"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <Activity className="w-6 h-6 text-blue-400" />
-            <h2 className="text-xl font-semibold text-blue-400">Hole Depth</h2>
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+            <h2 className="text-lg sm:text-xl font-semibold text-blue-400">Hole Depth</h2>
           </div>
-          <div className="text-5xl font-bold text-white mb-2">{drillingData.holeDepth.toFixed(2)}</div>
-          <div className="text-slate-400">meters</div>
+          <div className="text-4xl sm:text-5xl font-bold text-white mb-2">{drillingData.holeDepth.toFixed(2)}</div>
+          <div className="text-slate-400 text-sm sm:text-base">meters</div>
         </motion.div>
       </div>
 
